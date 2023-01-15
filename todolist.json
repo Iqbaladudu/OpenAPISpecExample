@@ -1,0 +1,444 @@
+{
+    "openapi":"3.0.2",
+    "info": {
+      "title":"Todolist API",
+      "version":"1.0",
+      "description": "OpenAPI for Todolist RESTful API",
+      "termsOfService": "https://www.merkez.id",
+      "contact": {
+        "name": "Muhammad Iqbal",
+        "email": "iqbal.adudu@gmail.com",
+        "url": "merkez.id"
+      },
+      "license": {
+        "name": "APACHE 2.0",
+        "url": "https://merkez.id"
+      }
+    },
+    "servers": [
+        {
+            "url": "https://{environment}.merkezinstitute.id/api/v1",
+            "description": "Todolist API server",
+            "variables": {
+                "environment": {
+                    "description": "Server Environment",
+                    "default": "dev",
+                    "enum": [
+                        "dev",
+                        "prod"
+                    ]
+                }
+            }
+        }
+    ],
+    "externalDocs": {
+        "description": "Anything You Ask",
+        "url": "https://stackoverflow.com"
+    },
+    "paths": {
+      "/todolist": {
+        "get": {
+          "security": [
+            {
+              "TodolistAuth": []
+            }
+          ],
+          "tags": ["Todolist"],
+          "summary": "Get all todolist",
+          "description": "Get all active todolist by default",
+          "parameters": [
+            {
+              "name": "include_done",
+              "required": false,
+              "description": "Is include done todolist",
+              "in": "query",
+              "schema": {
+                "type": "boolean",
+                "default": false,
+                "nullable": true
+              }
+            },
+            {
+              "name": "name",
+              "required": false,
+              "description": "Filter todolist by name",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "nullable": true,
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "examples": {
+                "golang": {
+                  "value": "Golang",
+                  "description": "Example name Golang"
+                },
+                "rust": {
+                  "value": "Rust",
+                  "description": "Example name Rust"
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success get all todolist",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ArrayTodolist"
+                    }
+                  },
+                  "examples": {
+                    "success": {
+                      "description": "Example success get all todolist",
+                      "value": [
+                        {
+                          "id": "1",
+                          "name": "Golang",
+                          "priority": 3,
+                          "tags": [
+                            "Golang",
+                            "Programming"
+                          ]
+                        },
+                        {
+                          "id": "1",
+                          "name": "Golang",
+                          "priority": 3,
+                          "tags": [
+                            "Golang",
+                            "Programming"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Todolist"],
+          "summary": "Create new todolist",
+          "description": "Create new todolist to database",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateOrUpdateTodolist"
+                },
+                "examples": {
+                  "golang": {
+                    "description": "Example create todolist Golang",
+                    "value": {
+                      "name": "Golang",
+                      "priority": 3,
+                      "tags": [
+                        "Golang",
+                        "Programming"
+                      ]
+                    }
+                  },
+                  "Rust": {
+                    "description": "Example create todolist Rust",
+                    "value": {
+                      "name": "Rust",
+                      "priority": 1,
+                      "tags": [
+                        "Rust",
+                        "Programming"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success create todolist",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "priority": {
+                        "type": "number"
+                      },
+                      "tags": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "examples": {
+                    "golang": {
+                      "description": "Success create Golang todolist",
+                      "value": {
+                        "id": "1",
+                        "name": "Golang",
+                        "priority": 3,
+                        "tags": [
+                          "Golang",
+                          "Programming"
+                        ]
+                      }
+                    },
+                    "Rust": {
+                      "description": "Success create todolist Rust",
+                      "value": {
+                        "id": "2",
+                        "name": "Rust",
+                        "priority": 1,
+                        "tags": [
+                          "Rust",
+                          "Programming"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/todolist/{todolistId}": {
+        "put": {
+          "tags": ["Todolist"],
+          "summary": "Update existing todolist",
+          "description": "Update existing todolist in database",
+          "responses": {
+            "200": {
+              "description": "Success update todolist",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreateOrUpdateTodolist"
+                  },
+                  "examples": {
+                    "golang": {
+                      "description": "Success update Golang todolist",
+                      "value": {
+                        "id": "1",
+                        "name": "Golang",
+                        "priority": 3,
+                        "tags": [
+                          "Golang",
+                          "Programming"
+                        ]
+                      }
+                    },
+                    "Rust": {
+                      "description": "Success update todolist Rust",
+                      "value": {
+                        "id": "2",
+                        "name": "Rust",
+                        "priority": 1,
+                        "tags": [
+                          "Rust",
+                          "Programming"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/TodolistId"
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "priority": {
+                      "type": "integer",
+                      "format": "int32",
+                      "minLength": 1,
+                      "default": 1
+                    },
+                    "tags": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "golang": {
+                    "description": "Example create todolist Golang",
+                    "value": {
+                      "name": "Golang",
+                      "priority": 3,
+                      "tags": [
+                        "Golang",
+                        "Programming"
+                      ]
+                    }
+                  },
+                  "Rust": {
+                    "description": "Example create todolist Rust",
+                    "value": {
+                      "name": "Rust",
+                      "priority": 1,
+                      "tags": [
+                        "Rust",
+                        "Programming"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": ["Todolist"],
+          "summary": "Delete existing todolist",
+          "description": "Delete existing todolist in database",
+          "responses": {
+            "200": {
+              "description": "Success delete todolist",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean"
+                      }
+                    }
+                  },
+                  "examples": {
+                    "success": {
+                      "description": "Success delete todolist",
+                      "value": {
+                        "success": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "parameters": [
+            {
+              "$ref": "#/components/parameters/TodolistId"
+            }
+          ]
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "TodolistAuth": {
+          "description": "Authentication for Todolist RESTful API",
+          "type": "apiKey",
+          "in": "header",
+          "name": "X-API-Key"
+        }
+      },
+      "parameters": {
+        "TodolistId": {
+          "name": "todolistId",
+          "in": "path",
+          "required": true,
+          "description": "Todolist id for updated/deleted",
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "examples": {
+            "Golang": {
+              "description": "Sample todolist id for Golang",
+              "value": "1"
+            },
+            "Rust": {
+              "description": "Sample todolist id for Rust",
+              "value": "2"
+            }
+          }
+        }
+      },
+      "schemas": {
+        "Todolist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "number"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "CreateOrUpdateTodolist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "number"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "ArrayTodolist": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Todolist"
+          }
+        }
+      }
+    }
+  }
