@@ -1,0 +1,2 @@
+# OpenAPISpecExample
+OpenAPISpec
